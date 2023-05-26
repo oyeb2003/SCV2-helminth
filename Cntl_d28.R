@@ -18,8 +18,6 @@ library(utils)
 library(SingleR)
 library("SingleCellExperiment")
 library(dittoSeq)
-library(presto)
-###install.packages("presto")
 library(ComplexHeatmap)
 library(circlize)
 
@@ -38,13 +36,6 @@ data <- ScaleData(data)
 data <- NormalizeData(data, assay = "RNA")
 data <- ScaleData(data, assay = "RNA")
 
-
-
-
-saveRDS(data, file = "cntl.rds")
-
-setwd("/Volumes/immunity_section_T2/Nina/PROJECTS/NIPPO COV2/Bola's Update/Control D28 alone/Objects")
-cntl <- readRDS(file = "cntl.rds")
 dim(cntl)
 table(cntl$orig.ident)
 
@@ -100,12 +91,6 @@ Idents(cntl) <- "seurat_clusters"
 cntl <- FindClusters(cntl, resolution = 0.7)
 cntl <- RunUMAP(cntl, dims = 1:13)
 DimPlot(cntl, label = TRUE, reduction = "umap")
-
-saveRDS(cntl, file = "cntlseurat.rds")
-
-setwd("/Volumes/immunity_section_T2/Nina/PROJECTS/NIPPO COV2/Bola's Update/Control D28 alone/Objects")
-cntl <- readRDS(file = "cntlseurat.rds")
-cntl <- readRDS(file = "cntlclusters.rds")
 
 
 ##Find Markers
@@ -996,40 +981,3 @@ dittoBarPlot(
   theme =theme_classic( base_size = 15
   ))
 
-#viral RNA
-#orf1ab, S, orf3a, E, M, orf6, orf7a, orf8, N, orf10
-DefaultAssay(cov2) <- "RNA"
-cov2_marker_gene_list <- list(c("orf1ab", "S", "orf3a", "E", "M", "orf6", "orf7a", "orf8", "N", "orf10"))
-cov2 <- AddModuleScore(cov2, features = cov2_marker_gene_list, name = "cov2genes_score")
-FeaturePlot(object = cov2, features = "cov2genes_score1", pt.size = 1, order = TRUE)
-
-
-
-Idents(cov2) <- "CellType"
-VlnPlot(cov2, features = 
-          "orf1ab")
-Idents(cov2) <- "Condition"
-VlnPlot(cov2, features = 
-          "cov2genes_score1")
-Idents(cov2) <- "CellType"
-VlnPlot(cov2, features = 
-          "S", split.by = "Condition")
-VlnPlot(cov2, features = 
-          "orf3a", split.by = "Condition")
-VlnPlot(cov2, features = 
-          "E", split.by = "Condition")
-VlnPlot(cov2, features = 
-          "M", split.by = "Condition")
-VlnPlot(cov2, features = 
-          "orf6", split.by = "Condition")
-VlnPlot(cov2, features = 
-          "orf7a", split.by = "Condition")
-VlnPlot(cov2, features = 
-          "orf8", split.by = "Condition")
-VlnPlot(cov2, features = 
-          "N", split.by = "Condition")
-VlnPlot(cov2, features = 
-          "orf10", split.by = "Condition")
-Idents(cov2) <- "Condition"
-VlnPlot(cov2, features = 
-          "orf1ab", split.by = "Condition")
